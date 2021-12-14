@@ -33,7 +33,6 @@ public class YyghException extends RuntimeException {
 
     }
 
-
     /**
      * 接收枚举对象
      * @param resultCodeEnum
@@ -44,7 +43,6 @@ public class YyghException extends RuntimeException {
         this.code=code;
 
     }
-
     @Override
     public String toString() {
         return "YyghException{" +

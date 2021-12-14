@@ -3,6 +3,7 @@ package com.eugeneli.yygh.hosp.controller;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.api.R;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.eugeneli.yygh.common.exception.YyghException;
 import com.eugeneli.yygh.common.result.Result;
 import com.eugeneli.yygh.common.utils.MD5;
 import com.eugeneli.yygh.hosp.service.HospitalSetService;
@@ -39,6 +40,12 @@ public class HospitalSetController {
     @GetMapping("findAll")
     public Result  findAllHospitalSet(){
 
+        try {
+            int a=1/0;
+        }catch (Exception e){
+
+            throw new YyghException("失败了",201);
+        }
         List<HospitalSet> list = hospitalSetService.list();
         return Result.ok(list);
 
@@ -67,32 +74,33 @@ public class HospitalSetController {
      * @return
      */
     @ApiOperation("条件查询带分页")
-    @GetMapping("/findPageHospSet/{current}/{limit}")
+    @PostMapping("/findPageHospSet/{current}/{limit}")
     public Result findPageHospSet(@PathVariable Long current,
                                   @PathVariable Long limit,
                                   @RequestBody(required = false) HospitalSetQueryVo hospitalSetQueryVo){
 
-        //1.封装page 传递当前页 每页记录数
+
+        //1.封装page 传入当前页 每页数量
         Page<HospitalSet> page=new Page<>(current,limit);
 
-        //2.构建条件查询
+        //2.创建条件查询
         QueryWrapper<HospitalSet> wrapper=new QueryWrapper<>();
 
+        //3.查询的字段信息
         String hosname = hospitalSetQueryVo.getHosname();
-        if(!StringUtils.isEmpty(hosname)){
-            //医院名称不为空时进行模糊查询
+        String hoscode = hospitalSetQueryVo.getHoscode();
+
+        //4.在不为空的情况下进行查询字段的设置
+        if (!StringUtils.isEmpty(hosname)){
             wrapper.like("hosname",hosname);
         }
 
-        String hoscode = hospitalSetQueryVo.getHoscode();
-        if (!StringUtils.isEmpty(hoscode)) {
-            //医院编号不为空时进行等值查询
-            wrapper.eq("hoscode",hoscode);
+        if (!StringUtils.isEmpty(hoscode)){
+            wrapper.like("hoscode",hoscode);
         }
 
         Page<HospitalSet> hospitalSetPage = hospitalSetService.page(page, wrapper);
         return Result.ok(hospitalSetPage);
-
 
     }
 
@@ -187,7 +195,7 @@ public class HospitalSetController {
         String signKey = hospitalSet.getSignKey();
         String hoscode = hospitalSet.getHoscode();
 
-        //发送短信
+        // TODO: 2021/12/14 发送短信
         return Result.ok();
 
     }
