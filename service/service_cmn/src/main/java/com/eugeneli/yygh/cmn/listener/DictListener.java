@@ -23,7 +23,7 @@ public class DictListener extends AnalysisEventListener<DictEeVo> {
         this.dictMapper = dictMapper;
     }
 
-    //一行一行读取数据
+    //一行一行读取数据 从第二行读取 第一行表头不需要读取
     @Override
     public void invoke(DictEeVo dictEeVo, AnalysisContext analysisContext) {
 
@@ -34,6 +34,7 @@ public class DictListener extends AnalysisEventListener<DictEeVo> {
 
     }
 
+    //读取之后 执行
     @Override
     public void doAfterAllAnalysed(AnalysisContext analysisContext) {
 

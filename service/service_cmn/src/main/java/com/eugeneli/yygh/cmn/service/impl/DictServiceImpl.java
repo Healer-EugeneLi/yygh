@@ -84,8 +84,6 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
      */
     @Override
     public void exportDictData(HttpServletResponse response) {
-
-
         try {
             //设置下载信息
             response.setContentType("application/vnd.ms-excel");
@@ -95,24 +93,23 @@ public class DictServiceImpl extends ServiceImpl<DictMapper, Dict> implements Di
             fileName = URLEncoder.encode("数据字典", "UTF-8");
             response.setHeader("Content-disposition", "attachment;filename="+ fileName + ".xlsx");
 
+            //读取数据库中的数据信息
             List<Dict> dicts = dictMapper.selectList(null);
-            //转换结果 dict--DictEeVo
+            //转换结果 dict--DictEeVo 因为从数据库中读出来的数据是包装成Dict 所以是需要转化成DictEevo
             List<DictEeVo> dictEeVoList=new ArrayList<>(dicts.size());
             for(Dict dict:dicts){
                 DictEeVo dictEeVo=new DictEeVo();
-                BeanUtils.copyProperties(dict,dictEeVo,DictEeVo.class);//复制
+                BeanUtils.copyProperties(dict,dictEeVo,DictEeVo.class);//复制 将dict中的内容复制到dictEevVo
                 dictEeVoList.add(dictEeVo);
             }
 
             EasyExcel.write(response.getOutputStream(),DictEeVo.class).sheet("数据字典").doWrite(dictEeVoList);
-
 
         } catch (UnsupportedEncodingException e) {
 
         } catch (IOException e) {
             e.printStackTrace();
         }
-
 
     }
 

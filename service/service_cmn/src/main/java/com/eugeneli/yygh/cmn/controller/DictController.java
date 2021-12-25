@@ -36,9 +36,7 @@ public class DictController {
 
         dictService.exportDictData(response);
 
-
     }
-
 
     @ApiOperation("导入数据字典")
     @PostMapping("importDictData")
@@ -48,7 +46,6 @@ public class DictController {
 
         return Result.ok();
     }
-
 
     @ApiOperation("根据id查询子数据列表")
     @GetMapping("findChildData/{id}")
